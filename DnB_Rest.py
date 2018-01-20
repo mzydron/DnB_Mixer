@@ -1,25 +1,58 @@
 from flask import Flask
-from Dnb_Mixer import DnB_database
+import sqlite3
+import sys
 
 #Rest service will get information from client and using parameters will extract record from database
 
+class Db_Operations:
 
+    def __init__(self):
+
+        self.database = 'dnb.db'
+        self.db_conn = self.create_database()
+        self.cur = self.db_conn.cursor()
+
+    def create_database(self):  # Creating database
+
+        conn = sqlite3.connect(self.database)
+        c = conn.cursor()
+        try:
+            c.execute(
+                'CREATE TABLE Dnb_songs(Id INTEGER PRIMARY KEY AUTOINCREMENT, Artist TEXT, Title TEXT, YT_Link TEXT);')
+            conn.commit()
+        except:
+            print('Database exist, skipping creation', sys.exc_info()[0])
+        print('Database connected')
+        return conn
+
+    def add_song(self, track):  # Adds track in format Artist | Song | link
+
+        self.cur.execute("INSERT INTO Dnb_songs(Artist,Title,YT_Link) VALUES (?,?,?)", track)
+        self.db_conn.commit()
+        return print("Song Added: ", track)
+
+    def get_all(self):
+        all = self.cur.execute("SELECT * from Dnb_songs")
+        return all
+
+
+
+# Flask part and routing:
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return "Welcome to DnB Mixer"
+    return "Welcome to DnB Mixer - commands : /all"
 
-@app.route('/artist')
-def return_artist():
-    artist = ""
-    db = DnB_database.Database()
-    art = db.get_artist()
-    artlist = art.fetchall()
-    for a in artlist:
-        artist += " "+str(a)
+@app.route('/all')
+def return_all():
+    all = ""
+    records = db.get_all()
+    alllist = records.fetchall()
+    for a in alllist:
+        all += " "+str(a)
+    return all
 
-    return artist
 
 
 
@@ -29,4 +62,5 @@ def return_artist():
 
 
 if __name__ == '__main__':
+    db = Db_Operations()
     app.run()
