@@ -12,7 +12,7 @@ class Db_Operations:
         self.db_conn = self.create_database()
         self.cur = self.db_conn.cursor()
 
-    def create_database(self):  # Creating database
+    def create_database(self):  # Creating or connecting to database
 
         conn = sqlite3.connect(self.database)
         c = conn.cursor()
@@ -35,7 +35,10 @@ class Db_Operations:
         all = self.cur.execute("SELECT * from Dnb_songs")
         return all
 
-
+    def get_all_links(self):
+        response = self.cur.execute("SELECT YT_link from Dnb_songs")
+        decoded = response.fetchall()
+        return decoded
 
 # Flask part and routing:
 app = Flask(__name__)
@@ -54,9 +57,10 @@ def return_all():
     return all
 
 
-
-
-
+@app.route('/links')
+def give_links():
+    yt_links_list = db.get_all_links()
+    return str(yt_links_list)
 
 
 
