@@ -41,7 +41,7 @@ class Track_Operations:
 
         r = request.urlopen(self.url + "all")
         all_decoded = r.read().decode("utf-8")
-        return print(all_decoded)
+        return all_decoded
 
 
 class Gui:
@@ -82,12 +82,13 @@ class Gui:
         self.tl_window.title("Track list")
 
 
-        self.get_button = Button(self.tl_window, text="GET", command=self.track_op.get_track_list)
-        self.get_button.pack()
+        raw_text = self.track_op.get_track_list()
 
-        self.tl_label = Label(text=self.track_op.get_track_list)
+        self.tl_label = Label(self.tl_window, text=raw_text)
         self.tl_label.pack()
 
+        self.text_out = Text(self.tl_window, text=raw_text)
+        self.text_out.pack()
 
 if __name__ == '__main__':
 
