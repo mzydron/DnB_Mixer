@@ -40,12 +40,14 @@ class Db_Operations:
         decoded = response.fetchall()
         return decoded
 
+
 # Flask part and routing:
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return "Welcome to DnB Mixer - commands : /all"
+    return "Welcome to DnB Jukebox REST - commands : /all for all songs" \
+           "/links - for youtube links"
 
 @app.route('/all')
 def return_all():
