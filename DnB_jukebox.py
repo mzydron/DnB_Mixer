@@ -39,7 +39,7 @@ class Track_Operations:
 
     def get_track_list(self):
 
-        r = request.urlopen(self.url + "all")
+        r = request.urlopen(self.url + "track_list")
         all_decoded = r.read().decode("utf-8")
         return all_decoded
 
@@ -71,9 +71,16 @@ class Gui:
 
     def info_window(self):
 
-        self.top = Toplevel(height=200,width=400,bg ="red")
+
+
+        self.top = Toplevel(height=200, width=150)
         self.top.title("Info")
-        self.top.geometry()
+
+        self.back_img = PhotoImage(file = "dnb2.gif")
+        self.img_label = Label(self.top, image = self.back_img,anchor=E)
+        self.img_label.place(x=-100,y=-25)
+
+
 
 
     def track_list(self):
@@ -81,14 +88,11 @@ class Gui:
         self.tl_window = Toplevel()
         self.tl_window.title("Track list")
 
-
         raw_text = self.track_op.get_track_list()
 
-        self.tl_label = Label(self.tl_window, text=raw_text)
-        self.tl_label.pack()
-
-        self.text_out = Text(self.tl_window, text=raw_text)
+        self.text_out = Text(self.tl_window,height = 20,width = 40)
         self.text_out.pack()
+        self.text_out.insert(END,raw_text)
 
 if __name__ == '__main__':
 

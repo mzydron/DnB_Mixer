@@ -20,8 +20,7 @@ class Track_Operations:
 
 
 
-    def prep_link(self,link): # Gets link from list
-
+    def prep_link(self,link): # Deletes abundant characters from link
         return link[3:-1]
 
     def open_in_browser(self,link):

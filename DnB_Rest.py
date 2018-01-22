@@ -40,6 +40,9 @@ class Db_Operations:
         decoded = response.fetchall()
         return decoded
 
+    def get_track_list(self):
+        artist_song = self.cur.execute("Select Artist,Title from Dnb_songs")
+        return artist_song
 
 # Flask part and routing:
 app = Flask(__name__)
@@ -65,7 +68,11 @@ def give_links():
     return str(yt_links_list)
 
 
-
+@app.route('/track_list')
+def give_track_list():
+    artists_cur = db.get_track_list()
+    artists_rdy = artists_cur.fetchall()
+    return str(artists_rdy)
 
 if __name__ == '__main__':
     db = Db_Operations()
