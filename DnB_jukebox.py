@@ -31,12 +31,17 @@ class Track_Operations:
         preped_link = self.prep_link(random_link)
         return preped_link
 
-
     def play_random_song(self):
 
         all_links = self.get_yt_links()
         ran_link = self.get_random_link(all_links)
         self.open_in_browser(ran_link)
+
+    def get_track_list(self):
+
+        r = request.urlopen(self.url + "all")
+        all_decoded = r.read().decode("utf-8")
+        return print(all_decoded)
 
 
 class Gui:
@@ -59,24 +64,29 @@ class Gui:
         self.info_button = Button(master,text ="info", command=self.info_window)
         self.info_button.place(x=350, y=200)
 
+        self.tl_button = Button(master, text="Track list", command=self.track_list)
+        self.tl_button.place(x=50,y=111, anchor=N)
+
+
 
     def info_window(self):
 
         self.top = Toplevel(height=200,width=400,bg ="red")
         self.top.title("Info")
         self.top.geometry()
-        msg = Message(self.top, text="Pass")
-        msg.place()
+
 
     def track_list(self):
 
         self.tl_window = Toplevel()
-        self.tl_button = Button(self.tl_window,text="Track list")
+        self.tl_window.title("Track list")
 
 
+        self.get_button = Button(self.tl_window, text="GET", command=self.track_op.get_track_list)
+        self.get_button.pack()
 
-
-
+        self.tl_label = Label(text=self.track_op.get_track_list)
+        self.tl_label.pack()
 
 
 if __name__ == '__main__':
