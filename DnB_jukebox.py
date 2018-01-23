@@ -43,6 +43,11 @@ class Track_Operations:
         all_decoded = r.read().decode("utf-8")
         return all_decoded
 
+    def beautify_track_list(self,tl):
+
+        tl_split = tl.split()
+        return tl_split
+
 
 class Gui:
 
@@ -55,7 +60,7 @@ class Gui:
         self.bg_label = Label(master, image=self.photo)
         self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        self.dnb_jukebox_label = Label(master, text="Long live Drum and Bass", bg="green")
+        self.dnb_jukebox_label = Label(master, text="Long live Drum and Bass", bg="red")
         self.dnb_jukebox_label.place(x=135)
 
         self.play_button = Button(master, text="Play!", command=self.track_op.play_random_song, bg="red")
@@ -64,7 +69,7 @@ class Gui:
         self.info_button = Button(master,text ="info", command=self.info_window)
         self.info_button.place(x=350, y=200)
 
-        self.tl_button = Button(master, text="Track list", command=self.track_list)
+        self.tl_button = Button(master, text="Track list", command=self.track_list, bg="red")
         self.tl_button.place(x=50,y=111, anchor=N)
 
 
@@ -77,10 +82,8 @@ class Gui:
         self.top.title("Info")
 
         self.back_img = PhotoImage(file = "dnb2.gif")
-        self.img_label = Label(self.top, image = self.back_img,anchor=E)
+        self.img_label = Label(self.top, image = self.back_img, anchor=E)
         self.img_label.place(x=-100,y=-25)
-
-
 
 
     def track_list(self):
@@ -89,10 +92,14 @@ class Gui:
         self.tl_window.title("Track list")
 
         raw_text = self.track_op.get_track_list()
+        
 
-        self.text_out = Text(self.tl_window,height = 20,width = 40)
+        self.text_out = Text(self.tl_window, height = 20, width = 20)
         self.text_out.pack()
         self.text_out.insert(END,raw_text)
+
+
+
 
 if __name__ == '__main__':
 
