@@ -2,7 +2,7 @@ from tkinter import *
 from urllib import request
 import webbrowser
 import random
-
+import re
 
 # Class for song library operations :
 
@@ -48,6 +48,16 @@ class Track_Operations:
         tl_split = tl.split()
         return tl_split
 
+    def get_artist(self):
+        r = request.urlopen(self.url + "artist")
+        artist_decoded = r.read().decode("utf-8")
+        return artist_decoded
+
+    def get_titles(self):
+
+        r = request.urlopen(self.url + "titles")
+        titles_decoded = r.read().decode("utf-8")
+        return titles_decoded
 
 class Gui:
 
@@ -91,13 +101,40 @@ class Gui:
         self.tl_window = Toplevel()
         self.tl_window.title("Track list")
 
-        raw_text = self.track_op.get_track_list()
-        
+        #raw_text = self.track_op.get_track_list()
+        art = self.track_op.get_artist()
+        artists = self.re_artist(art)
 
-        self.text_out = Text(self.tl_window, height = 20, width = 20)
+        tit = self.track_op.get_titles()
+        titles = self.re_titles(tit)
+
+
+        self.text_out = Text(self.tl_window, height = 30, width = 30)
         self.text_out.pack()
-        self.text_out.insert(END,raw_text)
 
+        self.text_out.insert(END,artists+titles)
+
+    def re_artist(self,rest_artists):
+
+        artist_name_matches = re.findall("\'(.*?)\'",rest_artists)
+        artist_final = ""
+        for i in artist_name_matches:
+            poped = artist_name_matches.pop()
+            i ="\n"+poped
+            artist_final += i
+
+        return artist_final
+
+    def re_titles(self,rest_titles):
+
+        titles_name_matches = re.findall("\'(.*?)\'", rest_titles)
+        titles_final = ""
+        for i in titles_name_matches:
+            poped = titles_name_matches.pop()
+            i = "\n" + poped
+            titles_final += i
+
+        return titles_final
 
 
 
