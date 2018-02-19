@@ -59,6 +59,29 @@ class Track_Operations:
         titles_decoded = r.read().decode("utf-8")
         return titles_decoded
 
+    def re_artist(self,rest_artists):
+
+        artist_name_matches = re.findall("\'(.*?)\'", rest_artists)
+        artist_final = ""
+        while artist_name_matches:
+            poped = artist_name_matches.pop()
+            i ="\n"+poped
+            artist_final += i
+
+        return artist_final
+
+    def re_titles(self,rest_titles):
+
+        titles_name_matches = re.findall("\'(.*?)\'", rest_titles)
+        titles_final = ""
+        while titles_name_matches:
+            poped = titles_name_matches.pop()
+            i = "\n" + poped
+            titles_final += i
+
+        return titles_final
+
+
 class Gui:
 
     def __init__(self,master):
@@ -100,42 +123,24 @@ class Gui:
 
         self.tl_window = Toplevel()
         self.tl_window.title("Track list")
+        self.tl_window.grid()
 
-        #raw_text = self.track_op.get_track_list()
         art = self.track_op.get_artist()
-        artists = self.re_artist(art)
+        artists = self.track_op.re_artist(art)
+
+
+        self.text_artist = Text(self.tl_window, height = 30, width = 30)
+        self.text_artist.grid(row=1,column=1)
+        self.text_artist.insert(END, artists)
 
         tit = self.track_op.get_titles()
-        titles = self.re_titles(tit)
+        titles = self.track_op.re_titles(tit)
 
 
-        self.text_out = Text(self.tl_window, height = 30, width = 30)
-        self.text_out.pack()
 
-        self.text_out.insert(END,artists+titles)
-
-    def re_artist(self,rest_artists):
-
-        artist_name_matches = re.findall("\'(.*?)\'",rest_artists)
-        artist_final = ""
-        for i in artist_name_matches:
-            poped = artist_name_matches.pop()
-            i ="\n"+poped
-            artist_final += i
-
-        return artist_final
-
-    def re_titles(self,rest_titles):
-
-        titles_name_matches = re.findall("\'(.*?)\'", rest_titles)
-        titles_final = ""
-        for i in titles_name_matches:
-            poped = titles_name_matches.pop()
-            i = "\n" + poped
-            titles_final += i
-
-        return titles_final
-
+        self.text_titles = Text(self.tl_window, height=30, width=30)
+        self.text_titles.grid(row=1, column=2)
+        self.text_titles.insert(END, titles)
 
 
 if __name__ == '__main__':
